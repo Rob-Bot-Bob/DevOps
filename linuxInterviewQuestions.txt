@@ -1,0 +1,39 @@
+questions
+how can you see which kernel version a system is currently runnint ?
+uname -a (gives all kernel version revelease or verions -v -r)
+
+How can you check system current ip ?
+ifconf  (ipv its inet and inet6)
+ip addr show (another way to how the ips also cna give the name of the device eth0 for specific)
+
+how to check for free disk space?
+df -ah (all file sistem human readeable -ah, also there is lsblk this is for the mounts on the system)
+
+How do yoy manage services on a system?
+service udev status 
+service <servicename> stop
+systemctl status <servicename> 
+
+How would you check the size of directory ?
+du -sh <foldername>
+
+How do you check for open ports?
+sudo netstat -tulpn  (sudo to see the pidprogram name)
+
+Check CPU usage for a process ?
+ps aux | grep nginx 
+top
+htop 
+
+mount new volumes in system ?
+ls /mnt 
+mount /dev/sda2 /mnt 
+mount
+less /etc/fstab (this is to mount the device when the system boots)
+
+how do look for answersto quesiton ?
+man <command>
+man ps 
+
+
+ 
