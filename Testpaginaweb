@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Tables with Global Sum</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        .clickable {
+            cursor: pointer;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+        }
+        .clickable:hover {
+            background-color: #d1e0e0;
+        }
+        .selected {
+            background-color: #a8d8a0;
+        }
+        #globalTotal {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="tablesContainer">
+        <!-- Table 1 -->
+        <table class="myTable">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Item 1</td>
+                    <td class="clickable">10</td>
+                </tr>
+                <tr>
+                    <td>Item 2</td>
+                    <td class="clickable">20</td>
+                </tr>
+                <tr>
+                    <td>Item 3</td>
+                    <td class="clickable">30</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td style="display:none;"><strong>Total</strong></td>
+                    <td style="display:none;" class="tableTotal">0</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- Table 2 -->
+        <table class="myTable">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Item A</td>
+                    <td class="clickable">15</td>
+                </tr>
+                <tr>
+                    <td>Item B</td>
+                    <td class="clickable">25</td>
+                </tr>
+                <tr>
+                    <td>Item C</td>
+                    <td class="clickable">35</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td style="display:none;"><strong>Total</strong></td>
+                    <td style="display:none;" class="tableTotal">0</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- Table 3 -->
+        <table class="myTable">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Item X</td>
+                    <td class="clickable">5</td>
+                </tr>
+                <tr>
+                    <td>Item Y</td>
+                    <td class="clickable">10</td>
+                </tr>
+                <tr>
+                    <td>Item Z</td>
+                    <td class="clickable">20</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td style="display:none;"><strong>Total</strong></td>
+                    <td style="display:none;" class="tableTotal">0</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- Table 4 -->
+        <table class="myTable">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Item M</td>
+                    <td class="clickable">40</td>
+                </tr>
+                <tr>
+                    <td>Item N</td>
+                    <td class="clickable">50</td>
+                </tr>
+                <tr>
+                    <td>Item O</td>
+                    <td class="clickable">60</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td style="display:none;"><strong>Total</strong></td>
+                    <td style="display:none;" class="tableTotal">0</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <!-- Global Total -->
+        <div id="globalTotalContainer">
+            <strong>Global Total: </strong><span id="globalTotal">0</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

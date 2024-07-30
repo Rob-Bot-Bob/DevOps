@@ -1,0 +1,65 @@
+// script.js
+
+// Initialize global sum and map to track selected value for each table
+let globalSum = 0;
+const tableSelectedValues = new Map(); // Track selected value for each table
+
+// Function to update the total displayed in the footer of each table
+function updateTableTotal(table) {
+    const selectedCell = table.querySelector('tbody .clickable.selected');
+    let tableSum = 0;
+
+    if (selectedCell) {
+        tableSum = parseFloat(selectedCell.textContent);
+    }
+
+    table.querySelector('.tableTotal').textContent = tableSum;
+}
+
+// Function to update the global total displayed
+function updateGlobalTotal() {
+    document.getElementById('globalTotal').textContent = globalSum;
+}
+
+// Function to handle click events on clickable cells
+function handleCellClick(event) {
+    const clickedCell = event.target;
+    const table = clickedCell.closest('.myTable');
+
+    if (clickedCell.classList.contains('clickable')) {
+        const value = parseFloat(clickedCell.textContent);
+        const previouslySelectedCell = table.querySelector('tbody .clickable.selected');
+
+        // Check if the clicked cell is already selected
+        if (clickedCell.classList.contains('selected')) {
+            // If already selected, remove its value from the global sum
+            globalSum -= value;
+            clickedCell.classList.remove('selected');
+        } else {
+            // If not selected, add its value to the global sum
+            if (previouslySelectedCell) {
+                const previousValue = parseFloat(previouslySelectedCell.textContent);
+                globalSum -= previousValue;
+                previouslySelectedCell.classList.remove('selected');
+            }
+
+            globalSum += value;
+            clickedCell.classList.add('selected');
+        }
+
+        // Update table total and global total
+        updateTableTotal(table);
+        updateGlobalTotal();
+    }
+}
+
+// Add event listener to all tables to handle cell clicks
+document.querySelectorAll('.myTable').forEach(table => {
+    table.addEventListener('click', handleCellClick);
+});
+
+// Initialize the totals when the page loads
+window.onload = () => {
+    document.querySelectorAll('.myTable').forEach(table => updateTableTotal(table));
+    updateGlobalTotal();
+};

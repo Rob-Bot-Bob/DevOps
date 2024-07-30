@@ -10,5 +10,5 @@ for i in range(0,len(quotes)):
     print(quotes[i].text)
     print(authors[i].text)
     quoteTags = tags[i].find_all('a',class_='tag')
-    for quoteTag in quoteTags:
+    for quoteTag in quoteTags:  
         print(quoteTag.text)
