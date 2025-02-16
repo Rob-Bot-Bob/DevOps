@@ -1,2 +1,6 @@
 *.json
 *.rst
+venv/
+Lib/
+Scripts/
+Python/

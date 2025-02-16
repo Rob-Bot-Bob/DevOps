@@ -1,0 +1,91 @@
+import pandas as pd
+import openpyxl
+import time
+import chardet
+
+def detect_encoding(file_path):
+    with open(file_path, 'rb') as f:
+        result = chardet.detect(f.read())
+    return result['encoding']
+
+def process_csv_to_excel(csv_file_path):
+    # Step 1: Detect the file's encoding
+    encoding = detect_encoding(csv_file_path)
+    print(f"Detected encoding: {encoding}")
+
+    # Step 2: Load the CSV with the detected encoding
+    df = pd.read_csv(csv_file_path, encoding=encoding)
+
+# Define the master Excel file path
+master_excel_path = r'C:\Users\ferna\OneDrive\Documents\Dia\Timberwolves\Data\master_data.xlsx'
+
+def process_csv_to_excel(csv_file_path):
+    try:
+        # Try to load the CSV file with different encodings
+        df = pd.read_csv(csv_file_path, encoding='utf-8')
+    except UnicodeDecodeError:
+        try:
+            df = pd.read_csv(csv_file_path, encoding='ISO-8859-1')  # Fallback to ISO-8859-1
+        except UnicodeDecodeError:
+            df = pd.read_csv(csv_file_path, encoding='utf-16 LE')  # Fallback to UTF-16 if needed
+    
+    try:
+        # Try reading with different delimiters
+        df = pd.read_csv(csv_file_path, sep=',')  # Default is comma
+    except pd.errors.ParserError:
+        try:
+            df = pd.read_csv(csv_file_path, sep=';')  # Semicolon as delimiter
+        except pd.errors.ParserError:
+            df = pd.read_csv(csv_file_path, sep='\t')  # Tab as delimiter   
+
+    # Step 2: Create or load the master Excel file
+    if os.path.exists(master_excel_path):
+        wb = openpyxl.load_workbook(master_excel_path)
+        sheet = wb.active
+    else:
+        wb = openpyxl.Workbook()
+        sheet = wb.active
+        sheet.append(['Timestamp'] + [f'Column {i+1}' for i in range(len(df.columns))])
+    
+    # Step 3: Prepare the data for export
+    timestamp = pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')
+    row_data = [timestamp]
+    
+    # Step 4: Iterate over columns
+    for idx, column in enumerate(df.columns):
+        column_data = df[column]
+        
+        # Extract the first 30% of the data (assuming it's a numerical column)
+        range_end = int(len(column_data) * 0.3)
+        range_data = column_data[:range_end]
+        
+        # Find the max value in this range
+        max_value = range_data.max()
+        
+        # Step 5: Label the columns (odd = baselines, even = cortisol)
+        if idx % 2 == 0:
+            label = 'baseline'
+        else:
+            label = 'cortisol'
+        
+        # Append the result to the row
+        row_data.append(f'{max_value} ({label})')
+    
+    # Step 6: Append the row to the Excel sheet
+    sheet.append(row_data)
+    
+    # Save the Excel file
+    wb.save(master_excel_path)
+    print(f"Data exported to {master_excel_path} at {timestamp}")
+
+def main(csv_file_path):
+    while True:
+        process_csv_to_excel(csv_file_path)
+        # Wait for 1 minute before processing again
+        time.sleep(60)
+
+if __name__ == '__main__':
+    # Specify the path to your CSV file
+    csv_file_path = r'C:\Users\ferna\OneDrive\Documents\Dia\Timberwolves\Data\Test1.csv'
+    main(csv_file_path)
+

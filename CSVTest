@@ -1,0 +1,59 @@
+import pandas as pd
+import os
+import chardet
+# Directory containing your CSV files
+directory = r'C:\Users\ferna\OneDrive\Documents\Dia\Timberwolves\Data'
+
+# Dictionary to store the max peaks of each file
+max_peaks = {}
+
+def detect_encoding(file_path):
+    with open(file_path, 'rb') as f:
+        result = chardet.detect(f.read())
+    return result['encoding']
+
+def process_csv_to_excel(csv_file_path):
+    # Step 1: Detect the file's encoding
+    encoding = detect_encoding(csv_file_path)
+    print(f"Detected encoding: {encoding}")
+
+    # Step 2: Load the CSV with the detected encoding
+    df = pd.read_csv(csv_file_path, encoding=encoding)
+
+# Loop over each CSV file (labeled 0 to 21)
+for i in range(22):  # Assuming files are labeled from 0 to 21
+    # Construct the file path
+    file_path = os.path.join(directory, 'Test1.csv') #hardcoded name for testing, remove and put a wait to the fie path
+    
+    # Read the CSV file
+    df = pd.read_csv(file_path)
+    
+    # Extract the middle 50 rows from the second column (index 1)
+    middle_50_rows = df.iloc[25:75, 1]  # Rows 26 to 75 (0-indexed)
+    
+    # Find the maximum value in the middle 50 rows
+    max_peak = middle_50_rows.max()
+    
+    # Store the result in the dictionary
+    max_peaks[i] = max_peak
+
+# List to store the deltas
+delta_list = []
+
+# Calculate the differences in peak values for each pair
+for i in range(0, 21, 2):  # Looping over 0, 2, 4, ..., 20
+    file_pair = (i, i+1)  # Pair files (e.g., 0 and 1, 2 and 3, ...)
+    diff = max_peaks[i] - max_peaks[i+1]
+    
+    # Append the result to the delta_list
+    delta_list.append([i//2 + 1, diff])  # First column as 1, 2, 3,... and second column as the delta
+
+# Convert the list to a DataFrame
+delta_df = pd.DataFrame(delta_list, columns=["Index", "Delta"])
+
+# Save the DataFrame to an Excel file
+output_file = 'peak_differences.xlsx'
+delta_df.to_excel(output_file, index=False)
+
+# Print a message indicating that the file has been saved
+print(f"Peak differences have been saved to {output_file}")
